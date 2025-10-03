@@ -1,0 +1,64 @@
+# References:
+# - YAML schema reference
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
+# - Define variables
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch
+# - Specify jobs in your pipeline
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml
+
+variables:
+  # Basic information about a customisation
+  CustomisationName: FatigueManagement
+  MsiDescription: Gallagher Regulated Zones
+
+  Version.Prefix: RegulatedZones
+  BuildNumberFormat: $(Version.Prefix)_v$(Version.Major).$(Version.Minor).{Build:00}
+
+  # ============================================================
+  # These variables are specific to a customisation but their values are expected
+  # to remain the same across multiple Git branches.
+  # They are not expected to change after a new 'release/x.yy' branch is created.
+  # ============================================================
+
+  # For 8.50+:
+  # - Command Centre Server is 64-bit only.
+  # - Configuration Client is still 32-bit in 8.50. In the future, it may be switched to 64-bit and 32-bit support may be removed.
+  # - The customisation installer EXE is expected to run only on the server. Only the 64-bit installer EXE is needed.
+  # - The customisation Setup package (.msi file) includes both the 64-bit and the 32-bit customisation files. Only one MSI installer is needed.
+  # - Treat the x64 platform as the main platform and the x86 platform as an auxiliary platform (e.g. for producing the dependent files needed by the Setup project).
+
+  # Path related
+  CustomisationDir: Customisations\$(CustomisationName)
+  SolutionFilePath: $(CustomisationDir)\$(CustomisationName).sln
+  # x64
+  ResourcesSigFilePath: $(ResDir)\$(CustomisationName).sig
+  # x86
+  ResourcesSigFilePathX86: $(ResDirX86)\$(CustomisationName).sig
+  # Setup
+  SetupDir: Customisations\$(CustomisationName)\Setup
+  SetupOutputDir: $(SetupDir)\bin\$(BuildConfiguration)
+  SetupExeFile: Setup.exe
+
+  # Drop location related
+  DropFolder: \\gglrdproducts\RDInstalls\Customisations\$(CustomisationName)\$(Version.Major).$(Version.Minor)
+
+  # File signing related
+  FilesToSign: |
+    $(ElmoBinDir)\$(CustomisationName).dll
+    $(ElmoBinDir)\RegulatedZonesInstaller.exe
+    $(ResDir)\$(CustomisationName).rll
+    $(ElmoBinDirX86)\$(CustomisationName).dll
+    $(ResDirX86)\$(CustomisationName).rll
+
+  # MSI files
+  MsiFiles: |
+    $(SetupOutputDir)\*.msi
+
+  # Symbol files (.pdb files)
+  # x64
+  PdbFiles: |
+    $(SymbolsDir)\$(CustomisationName).pdb
+    $(SymbolsDir)\RegulatedZonesInstaller.pdb
+  # x86
+  PdbFilesX86: |
+    $(SymbolsDirX86)\$(CustomisationName).pdb

@@ -1,0 +1,33 @@
+name: Test With Actual Files
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+  pull_request:
+    branches:
+      - main
+      - feature/**
+  workflow_dispatch:
+
+jobs:
+  parse-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse all variables
+        uses: ./action
+        with:
+          files: |
+            testfiles/BertVariables.yml,
+            testfiles/BuildVariables.yml,
+            testfiles/ElmoVariables.yml,
+            testfiles/VersionVariables.yml
+          prefix: "TEST_"
+
+      - name: Show exported env
+        run: |
+          echo "------ ENV ------"
+          env | grep TEST_ | sort

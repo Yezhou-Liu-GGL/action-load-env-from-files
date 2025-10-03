@@ -1,0 +1,28 @@
+# References:
+# - Template types & usage -> Variable reuse
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=azure-devops
+# - Define variables
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch
+
+variables:
+  # Build platform and configuration
+  BuildConfiguration: Release
+
+  # For 8.50+:
+  # - Command Centre Server is 64-bit only.
+  # - Configuration Client is still 32-bit in 8.50. In the future, it may be switched to 64-bit and 32-bit support may be removed.
+  # - The customisation installer EXE is expected to run only on the server. Only the 64-bit installer EXE is needed.
+  # - The customisation Setup package (.msi file) includes both the 64-bit and the 32-bit customisation files. Only one MSI installer is needed.
+  # - Treat the x64 platform as the main platform and the x86 platform as an auxiliary platform (e.g. for producing the dependent files needed by the Setup project).
+
+  # x64
+  ElmoBinDir: Elmo\$(BuildConfiguration)\Bin
+  ResDir: $(ElmoBinDir)\Resources\en
+  SymbolsDir: $(ElmoBinDir)\Symbols
+  # x86
+  ElmoBinDirX86: $(ElmoBinDir)\x86
+  ResDirX86: $(ElmoBinDirX86)\Resources\en
+  SymbolsDirX86: $(ElmoBinDirX86)\Symbols
+
+  # Docker
+  DockerImage: rnd-docker-images.local.gallagher.io/cc-build:9.40

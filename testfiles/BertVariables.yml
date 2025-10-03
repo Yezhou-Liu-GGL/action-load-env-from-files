@@ -1,0 +1,37 @@
+# References:
+# - Template types & usage -> Variable reuse
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=azure-devops
+# - Define variables
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch
+
+variables:
+  # General names
+  GroverShortName: GR
+  RositaShortName: RS
+
+  # Build platform and configuration
+  GroverCxOsPlatformName: c6000
+  RositaCxOsPlatformName: cx-imx8x
+  BuildConfigurationLinux: relwithdebinfo
+
+  # Bert library
+  BertLibFile: libBert.so
+
+  # Path related
+  CustomisationsCommonBuildDirLinux: Customisations/Common/build
+  GroverBertLibDirLinux: Bert/build/$(GroverCxOsPlatformName)/$(BuildConfigurationLinux)/dist_stripped/controller
+  RositaBertLibDirLinux: Bert/build/$(RositaCxOsPlatformName)/$(BuildConfigurationLinux)/dist_stripped/controller
+  # CustCard related
+  CustCardDirLinux: Customisations/CustCard
+  CustCardDirWin: Customisations\CustCard
+
+  # Device software related
+  GenManifestCustScript: Customisations\Common\gen_manifest_cust.py
+  GenManifestCustScriptLinux: Customisations/Common/gen_manifest_cust.py
+  CustManifestSpecJsonFile: cust_manifest_spec.json
+  ControllerCustDockerBuildScript: docker-buildcustom.sh
+
+  # Artifactory server related
+  ArtifactRepositoryGrover: rnd-controller-builds/C6000/Grover
+  ArtifactRepositoryRosita: rnd-controller-builds/CX/Rosita
+  ArtifactRepositoryCustomisations: rnd-security-customisations

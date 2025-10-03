@@ -1,0 +1,6 @@
+{
+  "name": "Load env vars from files",
+  "description": "Load KEY=VALUE pairs from one or more files into the GitHub Actions environment for subsequent steps.",
+  "categories": [ "continuous-integration", "utilities" ],
+  "iconName": "octicon gear-24"
+}

@@ -1,0 +1,23 @@
+# References:
+# - Template types & usage -> Variable reuse
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=azure-devops
+# - Define variables
+#   https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch
+
+variables:
+  # Version related
+  Version.Major: 9
+  Version.Minor: 40
+
+  # Version files
+  VersionFilesPattern: |
+    Customisations\**\AssemblyInfo.cs
+    Customisations\**\*.csproj
+    Customisations\**\*.nuspec
+    Customisations\**\*.rc
+    Customisations\**\*.sig
+    Elmo\**\AssemblyInfo.cs
+    Elmo\**\*.csproj
+    Elmo\**\*.nuspec
+    Elmo\**\*.rc
+    Elmo\**\*.sig
